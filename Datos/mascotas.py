@@ -1,63 +1,57 @@
+import os
 import json
 
-try:
-    with open("../mascotas.json", "r", encoding="utf-8") as archivo:
-        mascotas = json.load(archivo)
+DIR_DATOS = "datos"
+ARCH_MASCOTAS = os.path.join(DIR_DATOS, "mascotas.json")
 
-except FileNotFoundError:
-    mascotas = []
+def _cargar_mascotas():
+    """Carga la lista de mascotas desde el archivo JSON."""
+    if not os.path.exists(ARCH_MASCOTAS):
+        return []
+    try:
+        with open(ARCH_MASCOTAS, "r", encoding="utf-8") as archivo:
+            return json.load(archivo)
+    except json.JSONDecodeError:
+        return []
 
-except json.JSONDecodeError:
-    mascotas = []
+def _guardar_mascotas(mascotas):
+    """Guarda la lista de mascotas en el archivo JSON."""
+    os.makedirs(DIR_DATOS, exist_ok=True)
+    with open(ARCH_MASCOTAS, "w", encoding="utf-8") as archivo:
+        json.dump(mascotas, archivo, indent=4, ensure_ascii=False)
 
-while True:
-    print("----------------------")
-    print("1. Registrar mascota")
-    print("2. Salir")
-    print("----------------------")
+def registrar_mascota():
+    """Función para registrar una nueva mascota en el sistema."""
+    print("\n--- Registrar Mascota ---")
+    mascotas = _cargar_mascotas()
 
-    option = input("Seleccione una opción: ")
+    codigo = input("Código: ").strip()
 
-    match option:
+    # Validación de código existente
+    if any(m["codigo"] == codigo for m in mascotas):
+        print(" Error: Ya existe una mascota con ese código.")
+        return
 
-        case "1":
-            print("1. Registrar Mascota")
+    nombre = input("Nombre: ").strip()
+    especie = input("Especie: ").strip()
+    raza = input("Raza: ").strip()
+    fecha_nacimiento = input("Fecha de nacimiento (dd/mm/aaaa): ").strip()
+    propietario = input("Nombre del propietario: ").strip()
+    telefono = input("Teléfono del propietario: ").strip()
+    estado = input("Estado (activo/inactivo): ").strip().lower()
 
-            codigo = input("Código: ")
-            nombre = input("Nombre: ")
-            especie = input("Especie: ")
-            raza = input("Raza: ")
-            fecha_nacimiento = input("Fecha de nacimiento (dd/mm/aaaa): ")
-            propietario = input("Nombre del propietario: ")
-            telefono = input("Teléfono del propietario: ")
-            estado = input("Estado (activo/inactivo): ")
+    nueva_mascota = {
+        "codigo": codigo,
+        "nombre": nombre,
+        "especie": especie,
+        "raza": raza,
+        "fecha_nacimiento": fecha_nacimiento,
+        "propietario": propietario,
+        "telefono": telefono,
+        "estado": estado
+    }
 
-            mascota = {
-                "codigo": codigo,
-                "nombre": nombre,
-                "especie": especie,
-                "raza": raza,
-                "fecha_nacimiento": fecha_nacimiento,
-                "propietario": propietario,
-                "telefono": telefono,
-                "estado": estado
-            }
+    mascotas.append(nueva_mascota)
+    _guardar_mascotas(mascotas)
 
-            mascotas.append(mascota)
-
-            with open("../mascotas.json", "w", encoding="utf-8") as archivo:
-                json.dump(
-                    mascotas,
-                    archivo,
-                    indent=4,
-                    ensure_ascii=False
-                )
-
-            print("Mascota registrada correctamente.")
-
-        case "2":
-            print("Saliendo del programa...")
-            break
-
-        case _:
-            print("Error, opción inválida, intenta de nuevo.")
+    print(" Mascota registrada correctamente en 'datos/mascotas.json'.")
