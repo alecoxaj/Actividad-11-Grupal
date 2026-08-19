@@ -1,7 +1,7 @@
 import json
 
 try:
-    with open("mascotas.json", "r", encoding="utf-8") as archivo:
+    with open("../mascotas.json", "r", encoding="utf-8") as archivo:
         mascotas = json.load(archivo)
 
 except FileNotFoundError:
@@ -45,7 +45,7 @@ while True:
 
             mascotas.append(mascota)
 
-            with open("mascotas.json", "w", encoding="utf-8") as archivo:
+            with open("../mascotas.json", "w", encoding="utf-8") as archivo:
                 json.dump(
                     mascotas,
                     archivo,
