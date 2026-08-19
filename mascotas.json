@@ -1,0 +1,22 @@
+[
+    {
+        "codigo": "MAS001",
+        "nombre": "Oddy",
+        "especie": "Perro",
+        "raza": "Frenchpuddle",
+        "fecha_nacimiento": "25/12/2025",
+        "propietario": "Marvin",
+        "telefono": "58997738",
+        "estado": "activo"
+    },
+    {
+        "codigo": "MAS002",
+        "nombre": "Kiss",
+        "especie": "Gato",
+        "raza": "Gato",
+        "fecha_nacimiento": "15/04/2026",
+        "propietario": "Santiago",
+        "telefono": "42488188",
+        "estado": "inactivo"
+    }
+]
