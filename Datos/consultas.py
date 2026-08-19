@@ -1,165 +1,95 @@
+import os
 import json
 
-ARCHIVO = "consultas.json"
+DIR_DATOS = "datos"
+ARCH_CONSULTAS = os.path.join(DIR_DATOS, "consultas.json")
+ARCH_MASCOTAS = os.path.join(DIR_DATOS, "mascotas.json")
 
 
-def cargar_consultas():
+def _cargar_json(ruta):
+    if not os.path.exists(ruta):
+        return []
     try:
-        with open(ARCHIVO, "r", encoding="utf-8") as archivo:
-            consultas = json.load(archivo)
-
-        return consultas
-
-    except FileNotFoundError:
-
+        with open(ruta, "r", encoding="utf-8") as archivo:
+            return json.load(archivo)
+    except json.JSONDecodeError:
         return []
 
 
-def guardar_consultas(consultas):
-    with open(ARCHIVO, "w", encoding="utf-8") as archivo:
-        json.dump(
-            consultas,
-            archivo,
-            ensure_ascii=False,
-        )
+def _guardar_consultas(consultas):
+    os.makedirs(DIR_DATOS, exist_ok=True)
+    with open(ARCH_CONSULTAS, "w", encoding="utf-8") as archivo:
+        json.dump(consultas, archivo, indent=4, ensure_ascii=False)
 
 
 def generar_codigo(consultas):
-    if len(consultas) == 0:
+    if not consultas:
         return "C001"
 
     ultimo_numero = 0
-
     for consulta in consultas:
+        codigo = consulta.get("codigo_consulta", "C000")
+        try:
+            numero = int(codigo[1:])
+            if numero > ultimo_numero:
+                ultimo_numero = numero
+        except ValueError:
+            continue
 
-        codigo = consulta["codigo_consulta"]
-
-        numero = int(codigo[1:])
-
-        if numero > ultimo_numero:
-            ultimo_numero = numero
-
-    siguiente = ultimo_numero + 1
-
-    return f"C{siguiente:03d}"
-
+    return f"C{ultimo_numero + 1:03d}"
 
 def registrar_consulta():
-    consultas = cargar_consultas()
+    print("\n--- Registrar Consulta ---")
+    codigo_mascota = input("Código de mascota: ").strip()
 
-    print("\n===== REGISTRAR CONSULTA =====")
-
-    codigo_mascota = input("Código de mascota: ")
-
-    fecha = input("Fecha: ")
-
-    motivo = input("Motivo: ")
-
-    diagnostico = input("Diagnóstico: ")
-
-    tratamiento = input("Tratamiento: ")
-
-    costo = float(input("Costo: Q"))
-
-    codigo_consulta = generar_codigo(consultas)
-
-    consulta = {
-
-        "codigo_consulta": codigo_consulta,
-
-        "codigo_mascota": codigo_mascota,
-
-        "fecha": fecha,
-
-        "motivo": motivo,
-
-        "diagnostico": diagnostico,
-
-        "tratamiento": tratamiento,
-
-        "costo": costo
-
-    }
-
-    consultas.append(consulta)
-    guardar_consultas(consultas)
-
-    print("\nConsulta registrada correctamente.")
-
-    print("Código de consulta:", codigo_consulta)
-
-
-def mostrar_consultas(consulta):
-    print("\nCONSULTAS: ")
-    print("Código consulta:",
-          consulta["codigo_consulta"], )
-
-    print("Código mascota:",
-          consulta["codigo_mascota"])
-
-    print("Fecha:",
-          consulta["fecha"])
-
-    print("Motivo:",
-          consulta["motivo"])
-
-    print("Diagnóstico:",
-          consulta["diagnostico"])
-
-    print("Tratamiento:",
-          consulta["tratamiento"])
-
-    print("Costo: Q",
-          format(consulta["costo"], ".2f"))
-
-
-def historial_mascota(codigo_mascota):
-    consultas = cargar_consultas()
-
-    encontradas = []
-
-    for consulta in consultas:
-
-        if consulta["codigo_mascota"].upper() == codigo_mascota.upper():
-            encontradas.append(consulta)
-
-    print("\n===== HISTORIAL DE CONSULTAS =====")
-
-    print("Mascota:", codigo_mascota)
-
-    if len(encontradas) == 0:
-        print("No tiene consultas registradas.")
-
+    mascotas = _cargar_json(ARCH_MASCOTAS)
+    if mascotas and not any(m["codigo"] == codigo_mascota for m in mascotas):
+        print(" Error: La mascota no existe en el sistema.")
         return
 
-    for consulta in encontradas:
-        print("\nHISTORIAL")
+    fecha = input("Fecha (DD/MM/AAAA): ").strip()
+    motivo = input("Motivo: ").strip()
+    diagnostico = input("Diagnóstico: ").strip()
+    tratamiento = input("Tratamiento: ").strip()
 
-        print("Código:",
-              consulta["codigo_consulta"])
+    try:
+        costo = float(input("Costo (Q): ").strip())
+    except ValueError:
+        costo = 0.0
 
-        print("Fecha:",
-              consulta["fecha"])
+    consultas = _cargar_json(ARCH_CONSULTAS)
+    codigo_consulta = generar_codigo(consultas)
 
-        print("Motivo:",
-              consulta["motivo"])
+    nueva_consulta = {
+        "codigo_consulta": codigo_consulta,
+        "codigo_mascota": codigo_mascota,
+        "fecha": fecha,
+        "motivo": motivo,
+        "diagnostico": diagnostico,
+        "tratamiento": tratamiento,
+        "costo": costo
+    }
 
-        print("Diagnóstico:",
-              consulta["diagnostico"])
+    consultas.append(nueva_consulta)
+    _guardar_consultas(consultas)
 
-        print("Tratamiento:",
-              consulta["tratamiento"])
-
-        print("Costo: Q",
-              format(consulta["costo"], ".2f"))
+    print(f" Consulta registrada correctamente con código [{codigo_consulta}].")
 
 
-def buscar(codigo_mascota):
-    consultas = cargar_consultas()
+def consultar_historial():
+    codigo_mascota = input("\nIngrese el código de la mascota a consultar: ").strip()
+    consultas = _cargar_json(ARCH_CONSULTAS)
 
-    for consulta in consultas:
+    encontradas = [c for c in consultas if c["codigo_mascota"].upper() == codigo_mascota.upper()]
 
-        if consulta["codigo_consulta"].upper() == codigo_mascota.upper():
-            return consulta
+    print(f"\n--- Historial de Consultas (Mascota: {codigo_mascota}) ---")
+    if not encontradas:
+        print("No hay consultas registradas para esta mascota.")
+        return
 
-    return None
+    for c in encontradas:
+        print(f"\n[Código: {c['codigo_consulta']}] - Fecha: {c['fecha']}")
+        print(f"  Motivo:      {c['motivo']}")
+        print(f"  Diagnóstico: {c['diagnostico']}")
+        print(f"  Tratamiento: {c['tratamiento']}")
+        print(f"  Costo:       Q{c['costo']:.2f}")
