@@ -1,0 +1,29 @@
+[
+    {
+        "codigo_consulta": "C001",
+        "codigo_mascota": "0001",
+        "fecha": "fghj",
+        "motivo": "fghj",
+        "diagnostico": "fghj",
+        "tratamiento": "fghj",
+        "costo": 0.0
+    },
+    {
+        "codigo_consulta": "C002",
+        "codigo_mascota": "0001",
+        "fecha": "erty",
+        "motivo": "tyui",
+        "diagnostico": "qw",
+        "tratamiento": "qw",
+        "costo": 0.0
+    },
+    {
+        "codigo_consulta": "C003",
+        "codigo_mascota": "11",
+        "fecha": "11212",
+        "motivo": "vacuna",
+        "diagnostico": "ghj",
+        "tratamiento": "gh",
+        "costo": 78.0
+    }
+]

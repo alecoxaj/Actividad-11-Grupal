@@ -1,0 +1,16 @@
+[
+    {
+        "codigo_mascota": "11",
+        "nombre_archivo": "Mascota1.jpg",
+        "tipo": "fotografia",
+        "fecha_asociacion": "2026-08-19 19:32:08",
+        "ruta_almacenada": "datos\\documentos\\11\\Mascota1.jpg"
+    },
+    {
+        "codigo_mascota": "0001",
+        "nombre_archivo": "Mascota2.jpg",
+        "tipo": "fotografia",
+        "fecha_asociacion": "2026-08-19 19:37:06",
+        "ruta_almacenada": "datos\\documentos\\0001\\Mascota2.jpg"
+    }
+]

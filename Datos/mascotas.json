@@ -1,0 +1,22 @@
+[
+    {
+        "codigo": "0001",
+        "nombre": "ghjkl",
+        "especie": "yhujikl",
+        "raza": "tyuio",
+        "fecha_nacimiento": "tyui",
+        "propietario": "ghjk",
+        "telefono": "ghjkl",
+        "estado": "fghjk"
+    },
+    {
+        "codigo": "11",
+        "nombre": "pepe",
+        "especie": "hj",
+        "raza": "gh",
+        "fecha_nacimiento": "sdf",
+        "propietario": "Juan",
+        "telefono": "r567",
+        "estado": "activo"
+    }
+]
