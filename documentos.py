@@ -1,6 +1,8 @@
 import os
 import json
 import shutil
+import subprocess
+import platform
 from datetime import datetime
 
 DIR_DATOS = "datos"
@@ -57,11 +59,24 @@ def asociar_documento():
         print(" Error: No existe una mascota con ese código.")
         return
 
-    ruta_origen = input("Ruta del archivo a asociar (ej. Kiss.jpg): ").strip()
+    entrada_archivo = input("Nombre o ruta del archivo (ej. mascota1.jpg): ").strip()
 
-    if not os.path.isfile(ruta_origen):
-        print(f" Error: No se encontró el archivo '{ruta_origen}'.")
-        return
+    entrada_archivo = entrada_archivo.replace('"', '').replace("'", "")
+
+    if os.path.isfile(entrada_archivo):
+        ruta_origen = entrada_archivo
+    else:
+        posible_en_documentos = os.path.join("documentos", entrada_archivo)
+        posible_en_datos_docs = os.path.join(DIR_DOCUMENTOS, entrada_archivo)
+
+        if os.path.isfile(posible_en_documentos):
+            ruta_origen = posible_en_documentos
+        elif os.path.isfile(posible_en_datos_docs):
+            ruta_origen = posible_en_datos_docs
+        else:
+            print(f" Error: No se encontró el archivo '{entrada_archivo}'.")
+            print(" Asegúrate de escribir bien el nombre o colocarlo dentro de la carpeta 'documentos/'.")
+            return
 
     carpeta_mascota = os.path.join(DIR_DOCUMENTOS, codigo)
     os.makedirs(carpeta_mascota, exist_ok=True)
@@ -82,7 +97,6 @@ def asociar_documento():
     _guardar_documentos(documentos)
 
     print(f" Documento '{nombre_archivo}' asociado correctamente a {mascota['nombre']} ({codigo}).")
-
 
 def mostrar_documentos():
     print("\n--- Documentos de una Mascota ---")
@@ -122,3 +136,60 @@ def recuperar_documento():
     shutil.copy2(encontrado["ruta_almacenada"], ruta_copia)
 
     print(f" Documento recuperado y copiado en: {ruta_copia}")
+
+def _abrir_archivo_sistema(ruta):
+    """Abre un archivo con el programa predeterminado del sistema operativo."""
+    try:
+        if not os.path.exists(ruta):
+            print(f" Error: El archivo no existe en la ruta '{ruta}'.")
+            return
+
+        sistema = platform.system()
+        if sistema == "Windows":
+            os.startfile(ruta)
+        elif sistema == "Darwin":  # macOS
+            subprocess.run(["open", ruta])
+        else:  # Linux / Unix
+            subprocess.run(["xdg-open", ruta])
+
+        print(" Abriendo archivo en el visor del sistema...")
+
+    except Exception as error:
+        print(f" Error al intentar abrir el archivo: {error}")
+
+
+def mostrar_documentos():
+    print("\n--- Documentos de una Mascota ---")
+    codigo = input("Código de la mascota: ").strip()
+
+    documentos = _cargar_documentos()
+    # Filtrar ignorando mayúsculas/minúsculas
+    docs_mascota = [d for d in documentos if d["codigo_mascota"].upper() == codigo.upper()]
+
+    if not docs_mascota:
+        print(f"No hay documentos registrados para la mascota '{codigo}'.")
+        return
+
+    print(f"\nDocumentos encontrados para la mascota [{codigo}]:")
+    print("----------------------------------------------------------------------")
+    for i, d in enumerate(docs_mascota, start=1):
+        print(f"  {i}. {d['nombre_archivo']} | Tipo: {d['tipo']} | Fecha: {d['fecha_asociacion']}")
+    print("----------------------------------------------------------------------")
+
+    # Opción para visualizar
+    respuesta = input("\n¿Deseas abrir alguno de estos archivos? (s/n): ").strip().lower()
+
+    if respuesta in ["s", "si", "sí"]:
+        try:
+            seleccion = int(input(f"Selecciona el número de archivo a abrir (1-{len(docs_mascota)}): ").strip())
+
+            if 1 <= seleccion <= len(docs_mascota):
+                doc_seleccionado = docs_mascota[seleccion - 1]
+                ruta_archivo = doc_seleccionado.get("ruta_almacenada", "")
+
+                _abrir_archivo_sistema(ruta_archivo)
+            else:
+                print(" Error: Número fuera de rango.")
+
+        except ValueError:
+            print(" Error: Debes ingresar un número válido.")
