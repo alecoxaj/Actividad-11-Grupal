@@ -1,1 +1,16 @@
-[]
+[
+    {
+        "codigo_mascota": "0001",
+        "nombre_vacuna": "covid",
+        "fecha_aplicacion": "hoy",
+        "proxima_dosis": "hoy",
+        "veterinario": "yo"
+    },
+    {
+        "codigo_mascota": "11",
+        "nombre_vacuna": "covid32",
+        "fecha_aplicacion": "hoy",
+        "proxima_dosis": "mañana",
+        "veterinario": "Marvin"
+    }
+]
