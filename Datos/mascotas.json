@@ -18,5 +18,35 @@
         "propietario": "Juan",
         "telefono": "r567",
         "estado": "activo"
+    },
+    {
+        "codigo": "0002",
+        "nombre": "Peluzon",
+        "especie": "Gato",
+        "raza": "tabby bicolor",
+        "fecha_nacimiento": "27/10/2024",
+        "propietario": "Angelo",
+        "telefono": "51512210",
+        "estado": "activo"
+    },
+    {
+        "codigo": "0003",
+        "nombre": "Kiss",
+        "especie": "Gato",
+        "raza": "grey tabby",
+        "fecha_nacimiento": "13/06/2020",
+        "propietario": "Santiago",
+        "telefono": "65156121",
+        "estado": "activo"
+    },
+    {
+        "codigo": "0004",
+        "nombre": "Oddy",
+        "especie": "Canina",
+        "raza": "French Poddle",
+        "fecha_nacimiento": "24/12/2025",
+        "propietario": "Marvin",
+        "telefono": "30375762",
+        "estado": "activo"
     }
 ]

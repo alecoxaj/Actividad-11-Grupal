@@ -12,5 +12,26 @@
         "tipo": "fotografia",
         "fecha_asociacion": "2026-08-19 19:37:06",
         "ruta_almacenada": "datos\\documentos\\0001\\Mascota2.jpg"
+    },
+    {
+        "codigo_mascota": "0002",
+        "nombre_archivo": "Peluzon.jpg",
+        "tipo": "fotografia",
+        "fecha_asociacion": "2026-08-20 19:46:37",
+        "ruta_almacenada": "datos\\documentos\\0002\\Peluzon.jpg"
+    },
+    {
+        "codigo_mascota": "0003",
+        "nombre_archivo": "Kiss.jpg",
+        "tipo": "fotografia",
+        "fecha_asociacion": "2026-08-20 19:57:07",
+        "ruta_almacenada": "datos\\documentos\\0003\\Kiss.jpg"
+    },
+    {
+        "codigo_mascota": "0004",
+        "nombre_archivo": "Oddy.jpg",
+        "tipo": "fotografia",
+        "fecha_asociacion": "2026-08-20 20:00:59",
+        "ruta_almacenada": "datos\\documentos\\0004\\Oddy.jpg"
     }
 ]
