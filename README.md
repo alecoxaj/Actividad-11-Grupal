@@ -76,8 +76,6 @@ C:.
 | `Datos/` | Carpeta utilizada para almacenar permanentemente los archivos JSON. |
 | `Datos/documentos/` | Guarda los documentos organizados según el código de cada mascota. |
 | `Documentos/` | Contiene los archivos originales que pueden asociarse con las mascotas. |
-| `__pycache__/` | Carpeta creada automáticamente por Python para almacenar archivos compilados. |
-| `README.md` | Contiene la descripción, estructura e instrucciones del proyecto. |
 
 ---
 
@@ -97,14 +95,13 @@ C:.
 +-------------+----------------------+-----------------------------------------+
 | Información | Formato seleccionado | Forma de almacenamiento                 |
 +-------------+----------------------+-----------------------------------------+
-| Mascotas    | JSON                 | Datos/m mascotas.json                   |
+| Mascotas    | JSON                 | Datos/mascotas.json                   |
 | Consultas   | JSON                 | Datos/consultas.json                    |
 | Vacunas     | JSON                 | Datos/vacunas.json                      |
 | Documentos  | JSON + archivos      | Datos/documentos.json y subcarpetas     |
 +-------------+----------------------+-----------------------------------------+
 ```
 
-> Corrección de la primera ruta: el archivo correspondiente a mascotas es `Datos/mascotas.json`.
 
 ```text
 +-------------+----------------------+-----------------------------------------+
